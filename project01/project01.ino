@@ -96,22 +96,23 @@ const int CLK = 17;                 // setup 7-segment CLK
 const int DIO = 16;                 // setup 7-segment DIO
 TM1637 sevenSegment(CLK, DIO);      // 7-segment 
  
-//define others
-int Button = 2;
-int BuzzerPin = 8;
+//define input
+int Button = 2;                     // button at pin 2
+int BuzzerPin = 8;                  // buzzer at pin 8
 
 //define colour
-int PIN_BLUE = 9;               // blue color at pin 9
-int PIN_RED = 10;               // red color at pin 10
-int PIN_GREEN = 11;             // green color at pin 11
+int PIN_BLUE = 9;                   // blue color at pin 9
+int PIN_RED = 10;                   // red color at pin 10
+int PIN_GREEN = 11;                 // green color at pin 11
 int counter = 0;
 int numColors = 255;
-int animationDelay = 10;        // RGB changes to the next color like it wip-wup
+int animationDelay = 10;            // RGB changes to the next color like it wip-wup
 
 //define state
-int State = HIGH;                   // state of button
-int ButtononCurrent;                // current button status
-int ButtononPrevius = LOW;          // previous nutton status
+int buttonState;
+int programState = 0;
+long buttonMillis = 0;
+const long intervalButton = 3000;
 
 void setColor (unsigned char red, unsigned char green, unsigned char blue)
 {       
@@ -123,19 +124,18 @@ void setColor (unsigned char red, unsigned char green, unsigned char blue)
 void setup() 
 {
     Serial.begin(9600);
-    pinMode(Button, INPUT);
-    pinMode(BuzzerPin, OUTPUT);
-    sevenSegment.init();
-    sevenSegment.set(7); // BRIGHT 0-7;
-    sevenSegment.displayNum(1234);
+    pinMode(Button, INPUT);             // make the button to be the input
+    digitalWrite(Button, HIGH);         // make the button state high
+    pinMode(BuzzerPin, OUTPUT);         // make the buzzer to be the output
+
+    //7-segment showing
+    sevenSegment.init();                // wake the 7-segment
+    sevenSegment.set(7);                // BRIGHT 0-7;
+    sevenSegment.displayNum(1234);      // showing number
     delay(500);
     sevenSegment.displayNum(5678);
     delay(500);
-    sevenSegment.displayStr("POP");
-    delay(500);
-    sevenSegment.displayStr(" UP");
-    delay(500);
-    sevenSegment.displayStr("POP");
+    sevenSegment.displayStr("POP");     // showing word
     delay(500);
     sevenSegment.displayStr(" UP");
     delay(500);
@@ -143,7 +143,36 @@ void setup()
 
 void loop()
 {
-    ButtononCurrent = digitalRead(Button);
+    //defined state LOW & HIGH
+    unsigned long currentMillis = millis();
+    buttonState = digitalRead(Button);
+    if(buttonState == LOW && programState == 0)
+    {
+        buttonMillis = currentMillis;
+        programState = 1;
+    }
+    else if(programState == 1 && buttonState == HIGH)
+    {
+        programState = 0;                //reset
+    }
+    if(currentMillis - buttonMillis > intervalButton && programState == 1) 
+    {
+        programState = 2;
+    }
+
+    if(programState == 2) 
+    {
+        programState = 0;
+    }
+
+    //define button state for holding guide
+    //int button1State;               // variables to hold the pushbutton states
+    //int count;                      // variables to count the time button that is held
+    //button1State = digitalRead(Button);
+    //if (button1State == HIGH)
+    //{
+    //    count = count + 1;
+    //}
 
     float colorNumber = counter > numColors ? counter - numColors: counter;
     float saturation = 1;                                   // Between 0 and 1 (0 = gray, 1 = full color)
@@ -156,30 +185,31 @@ void loop()
 
     setColor(red, green, blue);
 
-    counter = (counter + 1) % (numColors * 2);              
-    //another solution counter = (counter + 1) % (numColors);   **adjust it to be faster in changing color**
+    counter = (counter + 1) % (numColors * 2);              // method to showing the color 
+    //another mehod >>> counter = (counter + 1) % (numColors);   **adjust it to be faster in changing color**
 
     delay(animationDelay);
 }
 
-//HSB to RGB describe the colour cases
+//HSB to RGB colour cases
 long HSBtoRGB(float _hue, float _sat, float _brightness) 
 {
-    float red = 0.0;
-    float green = 0.0;
-    float blue = 0.0;
-    if (_sat == 0.0) 
+    float red = 0.0;                // set red cost to 0.0
+    float green = 0.0;              // set green cost to 0.0
+    float blue = 0.0;               // set blue cost to 0.0
+    if (_sat == 0.0)                
         {
-        red = _brightness;
-        green = _brightness;
-        blue = _brightness;
+        red = _brightness;          // set as the same brightness
+        green = _brightness;        // set as the same brightness
+        blue = _brightness;         // set as the same brightness
         } 
-    else 
+    else
         {
         if (_hue == 360.0) 
         {
             _hue = 0;
         }
+
         int slice = _hue / 60.0;
         float hue_frac = (_hue / 60.0) - slice;
         float aa = _brightness * (1.0 - _sat);
@@ -224,9 +254,9 @@ long HSBtoRGB(float _hue, float _sat, float _brightness)
             break;
         }
     }
-    long ired = red * 255.0;
-    long igreen = green * 255.0;
-    long iblue = blue * 255.0;
+    long ired = red * 255.0;                // cost x number of the colour
+    long igreen = green * 255.0;            // cost x number of the colour
+    long iblue = blue * 255.0;              // cost x number of the colour
 
     return long((ired << 16) | (igreen << 8) | (iblue));
 }
