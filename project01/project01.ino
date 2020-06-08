@@ -91,19 +91,19 @@
 #define REST      0
 
 //7 segment
-#include "TM1637.h" 
-const int CLK = 17;                 // setup 7-segment CLK
-const int DIO = 16;                 // setup 7-segment DIO
+#include "TM1637.h"
+const int DIO = 16;                 // setup 7-segment to A2
+const int CLK = 17;                 // setup 7-segment to A3
 TM1637 sevenSegment(CLK, DIO);      // 7-segment 
  
 //define input
 int Button = 2;                     // button at pin 2
-int BuzzerPin = 8;                  // buzzer at pin 8
+int BuzzerPin = 3;                  // buzzer at pin 8
 
 //define colour
-int PIN_BLUE = 9;                   // blue color at pin 9
-int PIN_RED = 10;                   // red color at pin 10
-int PIN_GREEN = 11;                 // green color at pin 11
+int PIN_BLUE = 3;                   // blue color at pin 3
+int PIN_GREEN = 5;                  // green color at pin 5
+int PIN_RED = 6;                    // red color at pin 6
 int counter = 0;
 int numColors = 255;
 int animationDelay = 10;            // RGB changes to the next color like it wip-wup
@@ -135,9 +135,9 @@ void setup()
     delay(500);
     sevenSegment.displayNum(5678);
     delay(500);
-    sevenSegment.displayStr("POP");     // showing word
+    sevenSegment.displayStr("OPEN");     // showing word
     delay(500);
-    sevenSegment.displayStr(" UP");
+    sevenSegment.displayStr("OFF");
     delay(500);
 }
 
