@@ -132,13 +132,20 @@ void setup()
     sevenSegment.init();                // wake the 7-segment
     sevenSegment.set(7);                // BRIGHT 0-7;
     sevenSegment.displayNum(1234);      // showing number
-    delay(500);
+    delay(700);
+    sevenSegment.displayNum(2345);
+    delay(700);
+    sevenSegment.displayNum(3456);
+    delay(700);
+    sevenSegment.displayNum(4567);
+    delay(700);
     sevenSegment.displayNum(5678);
-    delay(500);
-    sevenSegment.displayStr("OPEN");     // showing word
-    delay(500);
-    sevenSegment.displayStr("OFF");
-    delay(500);
+    delay(700);
+    sevenSegment.displayNum(6789);
+    delay(700);
+    sevenSegment.displayNum(7890);
+    delay(700);
+    sevenSegment.displayStr("LINK");     // showing word
 }
 
 void loop()
