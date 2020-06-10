@@ -42,7 +42,8 @@ void loop()
         count = 1;
         break;
         }
-    } 
+    }
+    
     else 
     {
         switch(count) 

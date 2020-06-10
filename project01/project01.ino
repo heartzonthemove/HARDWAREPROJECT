@@ -1,36 +1,44 @@
 //buzzer
-#include "pitches.h"
+#include "pitches.h"                            // buzzer library
+const int Buzzer = 8;                           // buzzer at pin 8
+int melody1[] = 
+{
+  NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
+};
+int noteDurations1[] = 
+{
+  4, 8, 8, 4, 4, 4, 4, 4
+};
+
+//potentiometer
+int val = 0;                                    // variable to store the value coming from the potentiometer
+int potPin = 1;                                 // select the input pin for the potentiometer
 
 //card scanner
-#include <SPI.h>
-#include <MFRC522.h>
-#define SS_PIN 10
-#define RST_PIN 9
-MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
+#include <SPI.h>                                // card scanner library
+#include <MFRC522.h>                            // card scanner library
+#define RST_PIN 9                               // card scanner rst at pin 9
+#define SS_PIN 10                               // card scanner ss at pin 10
+MFRC522 mfrc522(SS_PIN, RST_PIN);               // Create MFRC522 instance
 
 //7 segment
-#include "TM1637.h"
-const int DIO = 16;                 // setup 7-segment to A2
-const int CLK = 17;                 // setup 7-segment to A3
-TM1637 sevenSegment(CLK, DIO);      // 7-segment 
+#include "TM1637.h"                             // 7-segment library
+const int DIO = 16;                             // setup 7-segment to A2
+const int CLK = 17;                             // setup 7-segment to A3
+TM1637 sevenSegment(CLK, DIO);                  // 7-segment 
  
-//define input
-int Button = 2;                     // button at pin 2
-int Buzzer = 8;                  // buzzer at pin 8
+//define button
+const int Button = 2;                           // button at pin 2
+long lasttimestatechange = 0;
+String state = "ON";
 
-//define colour
-int PIN_BLUE = 3;                   // blue color at pin 3
-int PIN_GREEN = 5;                  // green color at pin 5
-int PIN_RED = 6;                    // red color at pin 6
-int counter = 0;
-int numColors = 255;
-int animationDelay = 10;            // RGB changes to the next color like it wip-wup
-
-//define state
-int buttonState;
-int programState = 0;
-long buttonMillis = 0;
-const long intervalButton = 3000;
+//define colors
+const int PIN_BLUE = 3;                         // blue color at pin 3
+const int PIN_GREEN = 5;                        // green color at pin 5
+const int PIN_RED = 6;                          // red color at pin 6
+int counter = 0;                                // counter color
+int numColors = 255;                            // number of all color 0-255
+int animationDelay = 10;                        // RGB changes to the next color like it wip-wup
 
 void setColor (unsigned char red, unsigned char green, unsigned char blue)
 {       
@@ -41,46 +49,35 @@ void setColor (unsigned char red, unsigned char green, unsigned char blue)
 
 void setup() 
 {
-    Serial.begin(9600);                 // show in the monitor screen
-    pinMode(Button, INPUT);             // make the button to be the input
-    digitalWrite(Button, HIGH);         // make the button state high
-    pinMode(Buzzer, OUTPUT);            // make the buzzer to be the output
-    SPI.begin();                        // Initiate  SPI bus
-    mfrc522.PCD_Init();                 // Initiate MFRC522
+    //beginner setup
+    Serial.begin(9600);                         // show in the monitor screen
+    pinMode(Button, INPUT);                     // make the button to be the input
+    
+    //card reader setup
+    SPI.begin();                                // Initiate  SPI bus 
+    mfrc522.PCD_Init();                         // Initiate MFRC522
 
-    //7-segment showing
-    sevenSegment.init();                // wake the 7-segment
-    sevenSegment.set(7);                // BRIGHT 0-7;
-    sevenSegment.displayNum(1234);      // showing number
+    //7-segment setup
+    sevenSegment.init();                        // wake the 7-segment
+    sevenSegment.set(7);                        // BRIGHT 0-7;
+    sevenSegment.displayNum(1234);              // showing number
     delay(700);
-    sevenSegment.displayStr("LINK");     // showing word
+    sevenSegment.displayStr("LINK");            // showing word
+
+    pinMode(Buzzer, OUTPUT);                    // make the buzzer to be the output
+    for (int thisNote = 0; thisNote < 8; thisNote++) 
+    {
+        int noteDuration1 = 1000 / noteDurations1[thisNote];
+        tone(8, melody1[thisNote], noteDuration1);
+        int pauseBetweenNotes1 = noteDuration1 * 1.30;
+        delay(pauseBetweenNotes1);
+        noTone(8);
+    }
 }
 
 void loop()
 {
-    //defined state LOW & HIGH
-    unsigned long currentMillis = millis();
-    buttonState = digitalRead(Button);
-    if(buttonState == LOW && programState == 0)
-    {
-        buttonMillis = currentMillis;
-        programState = 1;
-    }
-    else if(programState == 1 && buttonState == HIGH)
-    {
-        programState = 0;                //reset
-    }
-    if(currentMillis - buttonMillis > intervalButton && programState == 1) 
-    {
-        programState = 2;
-    }
-
-    if(programState == 2) 
-    {
-        programState = 0;
-    }
-
-    float colorNumber = counter > numColors ? counter - numColors: counter;
+    float colorNumber = counter > numColors ? counter - numColors : counter;
     float saturation = 1;                                   // Between 0 and 1 (0 = gray, 1 = full color)
     float brightness = .05;                                 // Between 0 and 1 (0 = dark, 1 is full brightness)
     float hue = (colorNumber / float(numColors)) * 360;     // Number between 0 and 360
@@ -88,29 +85,45 @@ void loop()
     int red = color >> 16 & 255;                            // to get red 
     int green = color >> 8 & 255;                           // to get green
     int blue = color & 255;                                 // to get blue
+    
+    long currenttime = millis();
+    if (state == "ON" && currenttime - lasttimestatechange >= 5000)
+    {
+        state = "OFF";
+        lasttimestatechange = currenttime;
+    }
+    else if (state == "OFF" && currenttime - lasttimestatechange >= 5000)
+    {
+        state = "ON";
+        lasttimestatechange = currenttime;
+    }
 
-    setColor(red, green, blue);
-
-    counter = (counter + 1) % (numColors * 2);              // method to showing the color 
-    //another mehod >>> counter = (counter + 1) % (numColors);   **adjust it to be faster in changing color**
-
-    delay(animationDelay);
+    //if (state == "ON")
+    //{
+    //}
+    else if (state == "OFF")
+    {
+        setColor(red, green, blue);
+        counter = (counter + 1) % (numColors * 2);              // method to showing the color
+        delay(animationDelay);
+    }
 }
 
 //HSB to RGB colour Equation
 long HSBtoRGB(float _hue, float _sat, float _brightness) 
 {
-    float red = 0.0;                // set red cost to 0.0
-    float green = 0.0;              // set green cost to 0.0
-    float blue = 0.0;               // set blue cost to 0.0
+    float red = 0.0;                            // set red cost to 0.0
+    float green = 0.0;                          // set green cost to 0.0
+    float blue = 0.0;                           // set blue cost to 0.0
+
     if (_sat == 0.0)                
         {
-        red = _brightness;          // set as the same brightness
-        green = _brightness;        // set as the same brightness
-        blue = _brightness;         // set as the same brightness
+        red = _brightness;                      // set as the same brightness
+        green = _brightness;                    // set as the same brightness
+        blue = _brightness;                     // set as the same brightness
         } 
     else
-        {
+    {
         if (_hue == 360.0) 
         {
             _hue = 0;
@@ -121,6 +134,7 @@ long HSBtoRGB(float _hue, float _sat, float _brightness)
         float aa = _brightness * (1.0 - _sat);
         float bb = _brightness * (1.0 - _sat * hue_frac);
         float cc = _brightness * (1.0 - _sat * (1.0 - hue_frac));
+
         switch(slice) 
         {
             case 0:
@@ -160,9 +174,14 @@ long HSBtoRGB(float _hue, float _sat, float _brightness)
             break;
         }
     }
-    long ired = red * 255.0;                // cost x number of the colour
-    long igreen = green * 255.0;            // cost x number of the colour
-    long iblue = blue * 255.0;              // cost x number of the colour
+
+    long ired = red * 255.0;                    // cost x number of the colour
+    long igreen = green * 255.0;                // cost x number of the colour
+    long iblue = blue * 255.0;                  // cost x number of the colour
 
     return long((ired << 16) | (igreen << 8) | (iblue));
 }
+
+//=============================================================================
+//                            E N D  O F  C O D E
+//=============================================================================
