@@ -1,42 +1,19 @@
-const int Button = 2;
-
-byte CurrentSwitch, lastSwitch;
-unsigned long timeStart;
-bool CheckingSwitch;   
-
 void setup()
 {
-    pinMode(Button, INPUT);
-    lastSwitch = digitalRead(Button);
-    CheckingSwitch = false;
+    pinMode(2, INPUT);
+    pinMode(8, OUTPUT);
 }
+int count = 0;
+int soundTest = 1;
 
 void loop()
 {
-    CurrentSwitch = digitalRead(Button);
-
-    if(CurrentSwitch != lastSwitch)
+    if (soundTest = 1)
     {
-        if(CurrentSwitch == LOW)
-        {
-            timeStart = millis();
-            CheckingSwitch = true;
-        }
-
-        else
-        {
-            CheckingSwitch = false; 
-        }
-       
-        lastSwitch = CurrentSwitch;
-    }
-
-    if( CheckingSwitch )
-    {
-        if( (millis() - timeStart ) >= 5000 )
-        {
-           
+        tone(8,200,3000);
+        if (digitalRead(2)==1)
+        { 
+            tone(8,0,5000);
         }
     }
-   
 }
