@@ -43,8 +43,8 @@
 [flowchart]: https://github.com/heartzonthemove/HARDWAREPROJECT/blob/master/image/dream.png
 
 ### 2. GAME
-![Diagram][flowchart2]
+![Diagram23][flowchart2]
 
-[flowchart2]: https://github.com/heartzonthemove/HARDWAREPROJECT/blob/master/image/Diagram.png
+[flowchart2]: https://github.com/heartzonthemove/HARDWAREPROJECT/blob/master/image/Diagram23.png
 
 
