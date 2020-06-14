@@ -14,23 +14,22 @@
 + ผู้ที่เล่นเกม platform อื่นๆ
 
 ## รายละเอียดโปรเจค
-
-### - Perception Module
+### PERCEPTION MODULE  (input module)
 - Potentiometer
 - RFID card reader 
 - button module (blue) 
 
-### - Behavior
+### MANIPULATION MODULE  (output module)
+- Active Buzzer
+- RGB SMD LED
+- 7 - segment display
+- 2.4” TFT Resistive touch HMI Screen
+
+### BEHAVIOR  (how it works?)
 1. เมื่อเปิดเครื่องจะมีเสียง และมี ไฟ RGB ทำงาน
 2. สามารถเลือกเกมผ่านหน้าจอ touch screen ได้
 3. สามารถเล่นเกมผ่านหน้าจอได้
 4. สามารถรับค่าข้อมูลผู้ใช้ ผ่านการสแกนบัตรได้
-
-### - Manipulation Module
-- Active Buzzer
-- RGB SMD LED
-- 7-segment display
--2.4” TFT Resistive touch HMI Screen
 
 ## โครงสร้างพื้นฐาน
 ![Copy of CN Project Slide 60%][diagram]
