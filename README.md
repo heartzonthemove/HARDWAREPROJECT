@@ -42,7 +42,7 @@
 
 [flowchart]: https://github.com/heartzonthemove/HARDWAREPROJECT/blob/master/image/dream.png
 
-### 2. GAME
+### 2. ตัวอย่าง GAME
 ![Diagram23][flowchart2]
 
 [flowchart2]: https://github.com/heartzonthemove/HARDWAREPROJECT/blob/master/image/Diagram23.png
