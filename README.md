@@ -20,7 +20,7 @@
 - button module (blue) 
 
 ### MANIPULATION MODULE  (output module)
-- Active Buzzer
+- Passive Buzzer
 - RGB SMD LED
 - 7 - segment display
 - 2.4” TFT Resistive touch HMI Screen
