@@ -8,7 +8,7 @@ void setup()
 
 void loop() 
 {
-    if (digitalRead(button) == 0) 
+    if (digitalRead(button) == 0)
     {
         Serial.println("BUTTON OFF STATE");
     }
