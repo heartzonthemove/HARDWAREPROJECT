@@ -35,8 +35,14 @@ NexPage page3 = NexPage(3, 0, "page3");                         // Page added as
 NexPage page4 = NexPage(4, 0, "page4");                         // Page added as a touch event
 NexPage page5 = NexPage(5, 0, "page5");                         // Page added as a touch event
 NexPage page6 = NexPage(6, 0, "page6");                         // Page added as a touch event
+NexPage page7 = NexPage(7, 0, "page7");                         // Page added as a touch event 
+NexPage page8 = NexPage(8, 0, "page8");                         // Page added as a touch event 
+NexPage page9 = NexPage(9, 0, "page9");                         // Page added as a touch event 
+NexPage page10 = NexPage(10, 0, "page10");                      // Page added as a touch event
+NexPage page11 = NexPage(11, 0, "page11");                      // Page added as a touch event
+NexPage page12 = NexPage(12, 0, "page12");                      // Page added as a touch event
 
-NexButton b0 = NexButton(0, 1, "b0");                           // button added as a button event lol?
+NexButton b0 = NexButton(0, 1, "b0");                           // button added as a button event
 NexButton b1 = NexButton(1, 1, "b1");                           // button added as a button event 
 NexButton b2 = NexButton(1, 2, "b2");                           // button added as a button event 
 NexButton b3 = NexButton(2, 3, "b3");                           // button added as a button event 
@@ -45,6 +51,17 @@ NexButton b5 = NexButton(2, 1, "b5");                           // button added 
 NexButton b6 = NexButton(3, 1, "b6");                           // button added as a button event 
 NexButton b7 = NexButton(3, 2, "b7");                           // button added as a button event 
 NexButton b8 = NexButton(4, 1, "b8");                           // button added as a button event 
+NexButton b9 = NexButton(5, 1, "b9");                           // button added as a button event 
+NexButton b10 = NexButton(7, 1, "b10");                         // button added as a button event 
+NexButton b11 = NexButton(7, 2, "b11");                         // button added as a button event 
+NexButton b12 = NexButton(7, 3, "b12");                         // button added as a button event 
+NexButton b13 = NexButton(8, 1, "b13");                         // button added as a button event 
+NexButton b14 = NexButton(10, 1, "b14");                        // button added as a button event 
+NexButton b15 = NexButton(10, 2, "b15");                        // button added as a button event 
+NexButton b16 = NexButton(10, 3, "b16");                        // button added as a button event 
+NexButton b17 = NexButton(11, 1, "b17");                        // button added as a button event 
+NexButton b18 = NexButton(12, 1, "b18");                        // button added as a button event 
+
 
 NexText t0 = NexText(4, 2, "t0");
 
@@ -60,6 +77,7 @@ NexTouch *nex_listen_list[] = {
 &b8,
 NULL
 };
+
 //card scanner
 #include <SPI.h>                                                // card scanner library
 #include <MFRC522.h>                                            // card scanner library
@@ -82,7 +100,7 @@ const int PIN_GREEN = 5;                                        // green color a
 const int PIN_RED = 6;                                          // red color at pin 6
 int ccounter = 0;                                               // ccounter color
 int numColors = 255;                                            // number of all color 0-255
-int animationDelay = analogRead(potPin);                                        // RGB changes to the next color like it wip-wup
+int animationDelay = analogRead(potPin);                        // RGB changes to the next color like it wip-wup
 
 void setColor (unsigned char red, unsigned char green, unsigned char blue)
 {       
@@ -174,7 +192,7 @@ void loop()
     {
         Serial.println("Authorized access");
         Serial.println();
-
+        
         Serial.print("t0.txt=");                                        // send text to nextion 
         Serial.print("\"");                                             // 2 tab to send the message to nextion
         Serial.print("ACCESS GRANTS");                                  // changing message sent to nextion
@@ -182,6 +200,7 @@ void loop()
         Serial.write(0xff);                                             // We always have to send this three lines after each command sent to the nextion display.
         Serial.write(0xff);
         Serial.write(0xff);
+        delay(1000);
     }
     else   
     {
@@ -195,6 +214,7 @@ void loop()
         Serial.write(0xff);                                             // We always have to send this three lines after each command sent to the nextion display.
         Serial.write(0xff);
         Serial.write(0xff);
+        delay(1000);
     }
 
 }
