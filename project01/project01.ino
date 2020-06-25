@@ -10,6 +10,15 @@ int noteDurations1[] =
   4, 8, 8, 4, 4, 4, 4, 4
 };
 
+int melody2[] = 
+{
+  NOTE_C4, NOTE_B3
+};
+int noteDurations2[] = 
+{
+  4, 4
+};
+
 //potentiometer
 int val = 0;                                                    // variable to store the value coming from the potentiometer
 int potPin = 1;                                                 // select the input pin for the potentiometer
@@ -63,7 +72,7 @@ void setup()
     sevenSegment.init();                                        // wake the 7-segment
     sevenSegment.set(7);                                        // BRIGHT 0-7;
     sevenSegment.displayNum(1234);                              // showing number
-    delay(700);
+    delay(700);                                                 // waiting for 0.7 sec
     sevenSegment.displayStr("LINK");                            // showing word
 
     //buzzer setup
@@ -90,24 +99,9 @@ void loop()
     int green = color >> 8 & 255;                               // to get green
     int blue = color & 255;                                     // to get blue
     
-    long currenttime = millis();
-    if (state == "ON" && currenttime - lasttimestatechange >= 5000)
-    {
-        state = "OFF";
-        lasttimestatechange = currenttime;
-    }
-    else if (state == "OFF" && currenttime - lasttimestatechange >= 5000)
-    {
-        state = "ON";
-        lasttimestatechange = currenttime;
-    }
-
-    else if (state == "OFF")
-    {
-        setColor(red, green, blue);
-        counter = (counter + 1) % (numColors * 2);              // method to showing the color
-        delay(animationDelay);
-    }
+    setColor(red, green, blue);
+    counter = (counter + 1) % (numColors * 2);                  // method to showing the color
+    delay(animationDelay);
 
     //card reader
     if ( ! mfrc522.PICC_IsNewCardPresent())                     // Look for new cards
