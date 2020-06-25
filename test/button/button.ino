@@ -1,4 +1,4 @@
-int button = 2;                 // button at pin 2
+int button = 7;                 // button at pin 7
 
 void setup() 
 {

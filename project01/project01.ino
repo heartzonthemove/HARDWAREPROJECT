@@ -5,7 +5,7 @@ int melody1[] =
 {
   NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
 };
-int noteDurations1[] = 
+int noteDurations1[] =                                          // sound duration 1
 {
   4, 8, 8, 4, 4, 4, 4, 4
 };
@@ -14,15 +14,52 @@ int melody2[] =
 {
   NOTE_C4, NOTE_B3
 };
-int noteDurations2[] = 
+int noteDurations2[] =                                          // sound duration 2 
 {
   4, 4
 };
 
-//potentiometer
-int val = 0;                                                    // variable to store the value coming from the potentiometer
-int potPin = 1;                                                 // select the input pin for the potentiometer
+//potentiometer                                                 
+int potPin = A1;                                                // select the input pin for the potentiometer
 
+//NEXTION touchscreen
+#include <SoftwareSerial.h>
+# include "Nextion.h"
+int variable1 = 0;
+int CurrentPage = 0;
+
+NexPage page0 = NexPage(0, 0, "page0");                         // Page added as a touch event
+NexPage page1 = NexPage(1, 0, "page1");                         // Page added as a touch event
+NexPage page2 = NexPage(2, 0, "page2");                         // Page added as a touch event
+NexPage page3 = NexPage(3, 0, "page3");                         // Page added as a touch event
+NexPage page4 = NexPage(4, 0, "page4");                         // Page added as a touch event
+NexPage page5 = NexPage(5, 0, "page5");                         // Page added as a touch event
+NexPage page6 = NexPage(6, 0, "page6");                         // Page added as a touch event
+
+NexButton b0 = NexButton(0, 1, "b0");                           // button added as a button event lol?
+NexButton b1 = NexButton(1, 1, "b1");                           // button added as a button event 
+NexButton b2 = NexButton(1, 2, "b2");                           // button added as a button event 
+NexButton b3 = NexButton(2, 3, "b3");                           // button added as a button event 
+NexButton b4 = NexButton(2, 2, "b4");                           // button added as a button event 
+NexButton b5 = NexButton(2, 1, "b5");                           // button added as a button event 
+NexButton b6 = NexButton(3, 1, "b6");                           // button added as a button event 
+NexButton b7 = NexButton(3, 2, "b7");                           // button added as a button event 
+NexButton b8 = NexButton(4, 1, "b8");                           // button added as a button event 
+
+NexText t0 = NexText(4, 2, "t0");
+
+NexTouch *nex_listen_list[] = {
+&b0,
+&b1,
+&b2,
+&b3,
+&b4,
+&b5,
+&b6,
+&b7,
+&b8,
+NULL
+};
 //card scanner
 #include <SPI.h>                                                // card scanner library
 #include <MFRC522.h>                                            // card scanner library
@@ -37,17 +74,15 @@ const int CLK = 17;                                             // setup 7-segme
 TM1637 sevenSegment(CLK, DIO);                                  // 7-segment 
  
 //define button
-const int Button = 2;                                           // button at pin 2
-long lasttimestatechange = 0;
-String state = "ON";
+const int Button = 7;                                           // button at pin 7
 
 //define colors
 const int PIN_BLUE = 3;                                         // blue color at pin 3
 const int PIN_GREEN = 5;                                        // green color at pin 5
 const int PIN_RED = 6;                                          // red color at pin 6
-int counter = 0;                                                // counter color
+int ccounter = 0;                                               // ccounter color
 int numColors = 255;                                            // number of all color 0-255
-int animationDelay = 10;                                        // RGB changes to the next color like it wip-wup
+int animationDelay = analogRead(potPin);                                        // RGB changes to the next color like it wip-wup
 
 void setColor (unsigned char red, unsigned char green, unsigned char blue)
 {       
@@ -85,12 +120,22 @@ void setup()
         delay(pauseBetweenNotes1);
         noTone(8);
     }
+
+    //touchscreen
+    nexInit();
+    Serial.print("t0.txt=");                                        // send text to nextion 
+    Serial.print("\"");                                             // 2 tab to send the message to nextion
+    Serial.print("TAP THE CARD");                                   // changing message sent to nextion
+    Serial.print("\"");                                             
+    Serial.write(0xff);                                             // We always have to send this three lines after each command sent to the nextion display.
+    Serial.write(0xff);
+    Serial.write(0xff);
 }
 
 void loop()
 {
     //rgb color
-    float colorNumber = counter > numColors ? counter - numColors : counter;
+    float colorNumber = ccounter > numColors ? ccounter - numColors : ccounter;
     float saturation = 1;                                       // Between 0 and 1 (0 = gray, 1 = full color)
     float brightness = .05;                                     // Between 0 and 1 (0 = dark, 1 is full brightness)
     float hue = (colorNumber / float(numColors)) * 360;         // Number between 0 and 360
@@ -100,7 +145,7 @@ void loop()
     int blue = color & 255;                                     // to get blue
     
     setColor(red, green, blue);
-    counter = (counter + 1) % (numColors * 2);                  // method to showing the color
+    ccounter = (ccounter + 1) % (numColors * 2);                  // method to showing the color
     delay(animationDelay);
 
     //card reader
@@ -129,14 +174,29 @@ void loop()
     {
         Serial.println("Authorized access");
         Serial.println();
-        delay(2000);
+
+        Serial.print("t0.txt=");                                        // send text to nextion 
+        Serial.print("\"");                                             // 2 tab to send the message to nextion
+        Serial.print("ACCESS GRANTS");                                  // changing message sent to nextion
+        Serial.print("\"");                                             
+        Serial.write(0xff);                                             // We always have to send this three lines after each command sent to the nextion display.
+        Serial.write(0xff);
+        Serial.write(0xff);
     }
     else   
     {
-        Serial.println("Access denied");
+        Serial.println("ACCESS DENIED");
         Serial.println();
-        delay(2000);
+
+        Serial.print("t0.txt=");                                        // send text to nextion 
+        Serial.print("\"");                                             // 2 tab to send the message to nextion
+        Serial.print("ACCESS DENIED");                                  // 
+        Serial.print("\"");                                             
+        Serial.write(0xff);                                             // We always have to send this three lines after each command sent to the nextion display.
+        Serial.write(0xff);
+        Serial.write(0xff);
     }
+
 }
 
 //HSB to RGB colour Equation

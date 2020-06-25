@@ -1,27 +1,22 @@
-int pin = A5;
+#include <Nextion.h>
 int val = 0;
 
-void setup()
+void setup() 
 {
     Serial.begin(9600);
-    pinMode(pin,INPUT);
+    pinMode(pin, INPUT);
 }
-
-void loop()
+void loop() 
 {
-    val = digitalRead(pin);
-    if (val == 0)
-    {
-        Serial.print("page 0");     //show "page 0" in the serial monitor
-        Serial.write(0xff);         //record what is see on the display.
-        Serial.write(0xff);         //record what is see on the display.
-        Serial.write(0xff);         //record what is see on the display.
-    }
-    else
-    {
-        Serial.print("page 1");     //show "page 1" in the serial monitor
-        Serial.write(0xff);         //record what is see on the display.
-        Serial.write(0xff);         //record what is see on the display.
-        Serial.write(0xff);         //record what is see on the display.
-    }
+    Serial.print("page 1");
+    Serial.write(0xff);
+    Serial.write(0xff);
+    Serial.write(0xff);
+    delay(2000);
+
+    Serial.print("page 0");
+    Serial.write(0xff);
+    Serial.write(0xff);
+    Serial.write(0xff);
+    delay(2000);
 }
