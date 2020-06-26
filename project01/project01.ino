@@ -232,6 +232,11 @@ void loop()
         delay(1000);
     }
 
+    if (digitalRead(Button) == 1)
+    {
+        Serial.println("BUTTON ON STATE");
+        sevenSegment.displayStr("PUSH");
+    }
 }
 
 //HSB to RGB colour Equation
