@@ -161,8 +161,16 @@ void setup()
 
 void loop()
 {
+    if (digitalRead(Button) == 0)
+    {
     sevenSegment.displayStr("LINK");
-
+    }
+    if (digitalRead(Button) == 1)
+    {
+        Serial.println("BUTTON ON STATE");
+        sevenSegment.displayStr("PUSH");
+    }
+    
     //rgb color
     float colorNumber = ccounter > numColors ? ccounter - numColors : ccounter;
     float saturation = 1;                                       // Between 0 and 1 (0 = gray, 1 = full color)
@@ -232,11 +240,6 @@ void loop()
         delay(1000);
     }
 
-    if (digitalRead(Button) == 1)
-    {
-        Serial.println("BUTTON ON STATE");
-        sevenSegment.displayStr("PUSH");
-    }
 }
 
 //HSB to RGB colour Equation
