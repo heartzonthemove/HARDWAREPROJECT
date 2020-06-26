@@ -62,7 +62,6 @@ NexButton b16 = NexButton(10, 3, "b16");                        // button added 
 NexButton b17 = NexButton(11, 1, "b17");                        // button added as a button event 
 NexButton b18 = NexButton(12, 1, "b18");                        // button added as a button event 
 
-
 NexText t0 = NexText(4, 2, "t0");
 
 NexTouch *nex_listen_list[] = {
@@ -75,6 +74,16 @@ NexTouch *nex_listen_list[] = {
 &b6,
 &b7,
 &b8,
+&b9,
+&b10,
+&b11,
+&b12,
+&b13,
+&b14,
+&b15,
+&b16,
+&b17,
+&b18,
 NULL
 };
 
