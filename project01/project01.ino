@@ -152,6 +152,8 @@ void setup()
 
 void loop()
 {
+    sevenSegment.displayStr("LINK");
+
     //rgb color
     float colorNumber = ccounter > numColors ? ccounter - numColors : ccounter;
     float saturation = 1;                                       // Between 0 and 1 (0 = gray, 1 = full color)
@@ -200,6 +202,8 @@ void loop()
         Serial.write(0xff);                                             // We always have to send this three lines after each command sent to the nextion display.
         Serial.write(0xff);
         Serial.write(0xff);
+
+        sevenSegment.displayStr("PASS");                                // showing word
         delay(1000);
     }
     else   
@@ -214,6 +218,8 @@ void loop()
         Serial.write(0xff);                                             // We always have to send this three lines after each command sent to the nextion display.
         Serial.write(0xff);
         Serial.write(0xff);
+
+        sevenSegment.displayStr("NOTP");                                // showing word
         delay(1000);
     }
 
