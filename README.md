@@ -32,19 +32,19 @@
 4. สามารถรับค่าข้อมูลผู้ใช้ ผ่านการสแกนบัตรได้
 
 ## โครงสร้างพื้นฐาน
-![Copy of CN Project Slide 60%][diagram]
+![CN Project][diagram]
 
-[diagram]: https://github.com/heartzonthemove/HARDWAREPROJECT/blob/master/image/Copy%20of%20CN%20Project%20Slide%2060%25.png
+[diagram]: https://github.com/heartzonthemove/HARDWAREPROJECT/blob/master/image/CN%20Project.png
 
 ## ระบบการทำงาน 
 ### 1. HARDWARE
-![dream][flowchart]
+![Diagramm][flowchart]
 
-[flowchart]: https://github.com/heartzonthemove/HARDWAREPROJECT/blob/master/image/dream.png
+[flowchart]: https://github.com/heartzonthemove/HARDWAREPROJECT/blob/master/image/Diagramm.png
 
 ### 2. ตัวอย่าง GAME
-![Diagram23][flowchart2]
+![gamegramm][flowchart2]
 
-[flowchart2]: https://github.com/heartzonthemove/HARDWAREPROJECT/blob/master/image/Diagram23.png
+[flowchart2]: https://github.com/heartzonthemove/HARDWAREPROJECT/blob/master/image/gamegramm.png
 
 
